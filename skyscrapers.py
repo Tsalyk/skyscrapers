@@ -189,4 +189,9 @@ def check_skyscrapers(input_path: str) -> bool:
     >>> check_skyscrapers("check.txt")
     True
     """
-    pass
+    buildings = read_input(input_path)
+
+    return (check_not_finished_board(buildings) and
+            check_uniqueness_in_rows(buildings) and
+            check_horizontal_visibility(buildings) and
+            check_columns(buildings))

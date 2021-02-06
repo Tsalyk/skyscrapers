@@ -185,9 +185,6 @@ def check_skyscrapers(input_path: str) -> bool:
     Main function to check the status of skyscraper game board.
     Return True if the board status is compliant with the rules,
     False otherwise.
-
-    >>> check_skyscrapers("check.txt")
-    True
     """
     buildings = read_input(input_path)
 

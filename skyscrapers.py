@@ -25,11 +25,10 @@ def left_to_right_check(input_line: str, pivot: int) -> bool:
     >>> left_to_right_check("452453*", 5)
     False
     """
-    ind_pivot = input_line.find(str(pivot))
     counter = 1
-    constant = int(input_line[ind_pivot+1])
+    constant = int(input_line[1])
 
-    for element in input_line[ind_pivot+1:-1]:
+    for element in input_line[1:-1]:
         if int(element) > constant:
             constant = int(element)
             counter += 1
@@ -107,8 +106,6 @@ def check_horizontal_visibility(board: list) -> bool:
                                      '*41532*', '*2*1***'])
     False
     """
-    board = board[1:len(board)-1]
-
     hint_ind = [-1 if el.count("*") >= 2 else el.find("*") for el in board]
     counter = 0
 
@@ -158,10 +155,15 @@ def check_columns(board: list) -> bool:
                        '*41532*', '*2*1***'])
     False
     """
-    up_hint = [(board[0].find(el) - 1, el) for el in board[0]
-                if el.isdigit()]
-    down_hint = [(board[-1].find(el) - 1, el) for el in board[-1]
-                if el.isdigit()]
+    up_hint = []
+    down_hint = []
+
+    for ind, element in enumerate(board[0]):
+        if element != "*":
+            up_hint.append((ind - 1, element))
+    for ind, element in enumerate(board[-1]):
+        if element != "*":
+            down_hint.append((ind - 1, element))
 
     column_lst = [[] for i in range(len(board)-2)]
 
@@ -180,9 +182,15 @@ def check_columns(board: list) -> bool:
     for ind, element in enumerate(column_lst):
         if "*" not in element:
             column_lst[ind] = "*" + column_lst[ind] + "*"
+
     down_pos = check_horizontal_visibility(column_lst)
 
     column_lst = list(map(lambda lst: lst[1:len(lst)-1], column_lst))
+
+    for element in column_lst:
+        if len(set(element)) != len(element):
+            return False
+
     column_lst = list(map(lambda lst: lst[::-1], column_lst))
 
     for i in up_hint:
@@ -190,6 +198,7 @@ def check_columns(board: list) -> bool:
     for ind, element in enumerate(column_lst):
         if "*" not in element:
             column_lst[ind] = "*" + column_lst[ind] + "*"
+
     up_pos = check_horizontal_visibility(column_lst)
 
     return up_pos and down_pos
